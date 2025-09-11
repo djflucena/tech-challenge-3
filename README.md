@@ -4,6 +4,19 @@ Este projeto tem como objetivo aplicar técnicas de Inteligência Artificial e E
 
 ---
 
+## 📁 Estrutura de Diretórios
+
+tech-challenge-3/
+├── data/                  # Dados brutos e tratados
+├── notebooks/             # Jupyter Notebook com análise e modelagem
+├── src/                   # Scripts de pré-processamento e treinamento
+├── models/                # Modelos treinados (.pkl ou .joblib)
+├── api/                   # Código da API FastAPI
+├── tests/                 # Testes unitários e de integração
+├── Dockerfile             # Containerização da API (opcional)
+├── requirements.txt       # Dependências do projeto
+└── README.md              # Documentação principal
+
 ## 📘 Etapas do Projeto
 
 ### 🔬 Jupyter Notebook
@@ -62,5 +75,5 @@ Este projeto tem como objetivo aplicar técnicas de Inteligência Artificial e E
 
 ### 1. Clonar o repositório
 ```bash
-git clone https://github.com/seuusuario/breast-cancer-diagnosis.git
-cd breast-cancer-diagnosis
+git clone https://github.com/djflucena/tech-challenge-3.git
+cd tech-challenge-3
