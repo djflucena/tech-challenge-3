@@ -8,15 +8,17 @@ Este projeto tem como objetivo aplicar técnicas de Inteligência Artificial e E
 
 ```
 tech-challenge-3/
-├── data/                  # Dados brutos e tratados
-├── notebooks/             # Jupyter Notebook com análise e modelagem
-├── src/                   # Scripts de pré-processamento e treinamento
-├── models/                # Modelos treinados (.pkl ou .joblib)
-├── api/                   # Código da API FastAPI
-├── tests/                 # Testes unitários e de integração
-├── Dockerfile             # Containerização da API (opcional)
-├── requirements.txt       # Dependências do projeto
-└── README.md              # Documentação principal
+├── data/              # Dados brutos e tratados
+├── notebooks/         # Jupyter Notebooks com análise e modelagem
+├── src/               # Scripts de pré-processamento e treinamento
+│   ├── data/          # Script para importar e salvar o dataset
+│   └── eda/           # Funções de Análise Exploratória de Dados (EDA)
+├── models/            # Modelos treinados (.pkl ou .joblib)
+├── api/               # Código da API FastAPI
+├── tests/             # Testes unitários e de integração
+├── Dockerfile         # Containerização da API (opcional)
+├── requirements.txt   # Dependências do projeto
+└── README.md          # Documentação principal
 ```
 
 ## 📘 Etapas do Projeto
