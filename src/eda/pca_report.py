@@ -19,7 +19,8 @@ Exemplo rápido de uso no notebook:
 >>> plot_scree(pca_out["expl_var"])
 >>> plot_scores(pca_out["scores"], y, pca_out["expl_var"])
 >>> plot_correlation_circle(pca_out["loadings"], pca_out["feature_names"], pca_out["expl_var"])
->>> plot_biplot(pca_out["scores"], pca_out["loadings"], pca_out["feature_names"], pca_out["expl_var"])
+>>> plot_biplot(pca_out["scores"], y, pca_out["loadings"], pca_out["feature_names"],
+    pca_out["expl_var"], 2.0, None, "cos2")
 >>> rank_df = rank_features(X_df, y, pca_out["contrib_df"])
 >>> selected = prune_by_correlation(X_df, priority=rank_df.index.tolist(), threshold=0.90, method="spearman")
 """
@@ -305,39 +306,78 @@ def plot_correlation_circle(
 
 def plot_biplot(
     scores: np.ndarray,
+    y: np.ndarray,
     loadings: np.ndarray,
     feature_names: List[str],
     expl_var: np.ndarray,
-    scale: Optional[float] = None,
+    *,
+    n_std: float = 2.0,
+    scale: float | None = None,
+    thickness_by: str = "cos2",
+    max_vars: int | None = None,
+    legend_title: str = "Diagnóstico",
 ) -> None:
     """
-    Biplot: observações (PC1×PC2) + setas de variáveis escaladas.
+    Biplot com classes: pontos PC1×PC2 coloridos por classe, elipses por classe
+    e setas das variáveis (loadings) escaladas.
 
     Args:
-        scores: escores do PCA (n×k).
-        loadings: *loadings* (p×k).
-        feature_names: nomes das variáveis (p).
-        expl_var: variância explicada (%) por PC.
-        scale: fator opcional para escalonar setas; se None, usa 0.75*max|scores|.
+        scores: matriz (n×k) de escores do PCA.
+        y: vetor 1D com rótulos (0/1 ou strings).
+        loadings: matriz (p×k) de loadings do PCA.
+        feature_names: nomes das p variáveis.
+        expl_var: variância explicada (%) por PC (para rótulos dos eixos).
+        n_std: abertura das elipses (~desvios-padrão).
+        scale: fator de escala das setas; se None usa 0.75*max|scores| nos 2 PCs.
+        thickness_by: "cos2" (espessura proporcional ao cos² em PC1/PC2) ou "none".
+        max_vars: se informado, plota apenas as `max_vars` variáveis com maior cos²
+                  (evita poluição visual).
+        legend_title: título da legenda das classes.
 
     Produz:
-        Um gráfico único com pontos (sem classe) e setas de variáveis.
+        Um gráfico único com observações (por classe), elipses e setas das variáveis.
     """
     if scale is None:
         scale = 0.75 * np.max(np.abs(scores[:, :2]))
 
+    # classes
+    labels = np.unique(y)
+    # nomes bonitos quando 0/1
+    name_map = {0: "Benigno", 1: "Maligno"}
+    names = [name_map.get(l, str(l)) for l in labels]
+
     fig, ax = plt.subplots()
-    ax.scatter(scores[:, 0], scores[:, 1], s=20, alpha=0.5, label="Observações")
 
-    for i, feat in enumerate(feature_names):
+    # scatter + elipses
+    markers = ["o", "^", "s", "D"]
+    for idx, lab in enumerate(labels):
+        sel = (y == lab)
+        ax.scatter(scores[sel, 0], scores[sel, 1], s=25, alpha=0.6,
+                   label=names[idx] if idx < len(names) else str(lab),
+                   marker=markers[idx % len(markers)])
+        ex, ey = _ellipse_line(scores[sel, 0], scores[sel, 1], n_std=n_std)
+        ax.plot(ex, ey, alpha=0.5)
+
+    # setas das variáveis
+    pc1, pc2 = loadings[:, 0], loadings[:, 1]
+    cos2 = pc1**2 + pc2**2
+    order = np.argsort(cos2)[::-1]
+    if max_vars is not None:
+        order = order[:max_vars]
+
+    for i in order:
+        lw = 1.0 + 4.0 * (cos2[i] / cos2.max()) if thickness_by == "cos2" else 1.25
         ax.arrow(0, 0, loadings[i, 0] * scale, loadings[i, 1] * scale,
-                 head_width=0.12, head_length=0.18, alpha=0.6)
-        ax.text(loadings[i, 0] * scale * 1.08, loadings[i, 1] * scale * 1.08, feat, fontsize=7)
+                 head_width=0.12, head_length=0.18, alpha=0.6, linewidth=lw)
+        ax.text(loadings[i, 0] * scale * 1.08, loadings[i, 1] * scale * 1.08,
+                feature_names[i], fontsize=7)
 
+    # eixos e rótulos
     ax.axhline(0, ls="--", lw=0.8); ax.axvline(0, ls="--", lw=0.8)
     ax.set_xlabel(f"Dim1 (PC1) — {expl_var[0]:.1f}%")
     ax.set_ylabel(f"Dim2 (PC2) — {expl_var[1]:.1f}%")
     ax.set_title("Biplot — Indivíduos e Variáveis")
+    ax.legend(title=legend_title)
     plt.tight_layout()
     plt.show()
 
