@@ -107,14 +107,15 @@ Motivos:
 
 ## 🛠 Tecnologias Utilizadas
 
-| Categoria         | Ferramentas                     |
-|------------------|----------------------------------|
-| Linguagem         | Python 3.10+                    |
-| Análise de Dados  | Pandas, NumPy, Seaborn          |
-| Machine Learning  | Scikit-learn, XGBoost, Keras    |
-| Redução Dimensional| PCA, SelectKBest, RFE          |
-| API Web           | FastAPI, Uvicorn                |
-| Deploy            | Docker *(opcional)*             |
+| Categoria                      | Ferramentas                                                                                    |
+|--------------------------------|-------------------------------------------------------------------------------------------------|
+| Linguagem                      | Python 3.10+                                                                                   |
+| Análise de Dados               | Pandas, NumPy, SciPy, Matplotlib (Seaborn opcional)                                            |
+| Machine Learning               | Scikit-learn, XGBoost                                                                          |
+| Seleção de Variáveis & Interpretação | SelectFromModel (LR L1/ElasticNet, RF, XGB), Mutual Information, Correlação (Spearman), **PCA para interpretação** |
+| API Web                        | FastAPI, Uvicorn                                                                               |
+| Deploy                         | Docker *(opcional)*                                                                            |
+
 
 ---
 
