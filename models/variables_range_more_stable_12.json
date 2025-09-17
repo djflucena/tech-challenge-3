@@ -1,0 +1,50 @@
+{
+  "worst_concavity": {
+    "min": 0.0,
+    "max": 1.252
+  },
+  "worst_area": {
+    "min": 185.2,
+    "max": 4254.0
+  },
+  "worst_texture": {
+    "min": 12.02,
+    "max": 49.54
+  },
+  "worst_smoothness": {
+    "min": 0.07117,
+    "max": 0.2226
+  },
+  "mean_concave_points": {
+    "min": 0.0,
+    "max": 0.2012
+  },
+  "area_error": {
+    "min": 6.802,
+    "max": 542.2
+  },
+  "mean_compactness": {
+    "min": 0.01938,
+    "max": 0.3454
+  },
+  "compactness_error": {
+    "min": 0.002252,
+    "max": 0.1354
+  },
+  "symmetry_error": {
+    "min": 0.007882,
+    "max": 0.07895
+  },
+  "worst_symmetry": {
+    "min": 0.1565,
+    "max": 0.6638
+  },
+  "texture_error": {
+    "min": 0.3602,
+    "max": 4.885
+  },
+  "concave_points_error": {
+    "min": 0.0,
+    "max": 0.05279
+  }
+}
