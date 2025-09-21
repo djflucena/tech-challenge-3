@@ -1,5 +1,10 @@
 # 🧠 Diagnóstico de Câncer de Mama com IA e Python
 
+### 🚀 Demo (produção – Render)
+O dashboard está publicado em **https://breast-cancer-dash.onrender.com/**.  
+> Obs.: no plano *free* do Render pode ocorrer *cold start* — a primeira carga pode levar alguns segundos.
+
+
 Este projeto tem como objetivo aplicar técnicas de Inteligência Artificial e Engenharia de Dados para diagnosticar tumores de mama como **malignos** ou **benignos**, utilizando a base de dados [Breast Cancer Wisconsin (Diagnostic)](https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic). O projeto é dividido em duas partes: análise e modelagem em Jupyter Notebook, e disponibilização do modelo via API com Python.
 
 ---
