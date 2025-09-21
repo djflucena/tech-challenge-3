@@ -1,0 +1,6 @@
+/* assets/main.css */
+html { scroll-behavior: smooth; }
+body { font-size: 15px; }
+.navbar { margin-bottom: 16px; }
+.card-title { margin-bottom: .5rem; }
+

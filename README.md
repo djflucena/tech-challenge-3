@@ -29,6 +29,8 @@ tech-challenge-3/
 
 ### 🔬 Jupyter Notebook
 
+Notebook: `notebooks/01_exploracao_modelagem.ipynb`
+
 #### 1. Apresentação da Base de Dados
 - Análise estatística dos atributos
 - Identificação da variável alvo (`Diagnosis`)
@@ -61,18 +63,12 @@ tech-challenge-3/
 ```
 
 **Resumo dos resultados (métrica primária Recall):**
-- **LR_L2**: MoreStable12 **0.9717** = FinalSelected16 **0.9717** (empate).  
-  AUC: MoreStable12 **0.9974** > 0.9970.  
-  AP: MoreStable12 **0.9966** > 0.9962. 
-- **LR_EN**: MoreStable12 **0.9717** > 0.9670.  
-  AUC: MoreStable12 **0.9972** > 0.9968.  
-  AP: MoreStable12 **0.9963** > 0.9959. 
-- **RF**: MoreStable12 **0,9434** > 0,9340.  
-  AUC: MoreStable12 **0.9952** > 0.9942.  
-  AP: MoreStable12 **0.9931** > 0.9924.  
-- **XGB**: MoreStable12 **0.9763** > 0.9623.  
-  AUC: MoreStable12 **0.9962** > 0.9958.  
-  AP: MoreStable12 **0.9946** > 0.9942. 
+| Modelo | Recall (MoreStable12 × FinalSelected16) | AUC (MoreStable12 × FinalSelected16) | AP (MoreStable12 × FinalSelected16) |
+|--------|------------------------------------------|---------------------------------------|-------------------------------------|
+| LR_L2  | **0.9717** = 0.9717 (empate)             | **0.9974** > 0.9970                   | **0.9966** > 0.9962                 |
+| LR_EN  | **0.9717** > 0.9670                      | **0.9972** > 0.9968                   | **0.9963** > 0.9959                 |
+| RF     | **0.9434** > 0.9340                      | **0.9952** > 0.9942                   | **0.9931** > 0.9924                 |
+| XGB    | **0.9763** > 0.9623                      | **0.9962** > 0.9958                   | **0.9946** > 0.9942                 |
 
 
 **Escolhemos o painel _MoreStable12_ com 12 variáveis.**  
@@ -94,14 +90,42 @@ Motivos:
 - Comparação de desempenho entre os modelos
 - Justificativa da escolha com base nas métricas
 
+> **Confiabilidade do sinal (Explicabilidade):** A análise com **DALEx** confirmou os sinais aprendidos pelo **LR L2 + MoreStable12** (Permutation Importance, PDP/ICE e Break Down coerentes com coeficientes e PCA). As divergências pontuais entre **importância por permutação** e **coeficientes** são esperadas devido a colinearidade/redundância e refletem impacto **no desempenho global** vs **peso linear**.
+
+
+### 5. Explicabilidade do Modelo — *DALEx*
+
+Notebook: `notebooks/02_explicabilidade_dalex.ipynb`
+
+**Objetivo.** Explicar **global** e **localmente** o modelo final (**LR L2 + MoreStable12**), validando se os sinais aprendidos são clinicamente coerentes e consistentes com as análises anteriores.
+
+**O que entregamos:**
+
+* **Permutation Importance** (baseada em queda de **AP/PR-AUC**): mede impacto prático de cada variável no desempenho global ao embaralhar seus valores.
+* **PDP/ICE** (parciais e individuais): mostram como a probabilidade prevista varia ao longo do domínio de cada variável (efeitos médios e heterogeneidade entre observações).
+* **Break Down** (local): decompõe a previsão de **6 amostras** (p_min, p_max e ~0.20/0.40/0.60/0.80) em contribuições pró/contra **Maligno**, partindo do intercepto.
+
+**Principais insights:**
+
+* **Permutation Importance vs. Coeficientes LR**: podem divergir — coeficientes medem **peso linear** condicionado aos demais preditores; permutação mede **efeito no desempenho** (captura interação/colinearidade e redundâncias).
+* Variáveis de "pior caso" (**worst_area**, **worst_texture**, **worst_concavity**) e erros (**area_error**, **concave_points_error**) aparecem **entre as mais influentes**, coerente com os coeficientes e com o PCA interpretativo.
+* Nos **Break Down**, casos de baixa probabilidade têm **medidas "pior" baixas** (empurram para **Benigno**); casos altos combinam valores "pior" e "erro" elevados (empurram para **Maligno**).
+
 ---
 
 ### 🌐 Projeto Web com Python
 
-#### 1. Criação de API REST
-- Implementação com **FastAPI**
-- Endpoint para envio de dados e retorno do diagnóstico
-- Formato de comunicação: JSON
+#### 1. Criação de Dashboard Interativo
+- Implementação com **Dash** + **Bootstrap**
+- Visualização de métricas e hiperparâmetros do modelo LR_L2 (MoreStable12)
+- Exploração interativa de variáveis e faixas
+- Formulário para inferência em tempo real
+- Preparação para execução local e em contêiner Docker
+
+##### Funcionalidades:
+- **Página Início**: Métricas do modelo, hiperparâmetros e informações sobre o painel MoreStable12
+- **Página Formulário**: Inputs para as 12 variáveis com validação e botão de predição
+- **Página Gráficos**: Importância das variáveis e histogramas exploratórios
 
 #### 2. Funcionalidades Adicionais *(opcionais)*
 - Autenticação via JWT
@@ -114,10 +138,11 @@ Motivos:
 | Categoria                      | Ferramentas                                                                                    |
 |--------------------------------|-------------------------------------------------------------------------------------------------|
 | Linguagem                      | Python 3.10+                                                                                   |
-| Análise de Dados               | Pandas, NumPy, SciPy, Matplotlib (Seaborn opcional)                                            |
+| Análise de Dados               | Pandas, NumPy, SciPy, Matplotlib e Seaborn                                                     |
 | Machine Learning               | Scikit-learn, XGBoost                                                                          |
 | Seleção de Variáveis & Interpretação | SelectFromModel (LR L1/ElasticNet, RF, XGB), Mutual Information, Correlação (Spearman), **PCA para interpretação** |
-| API Web                        | FastAPI, Uvicorn                                                                               |
+| Explicabilidade                | DALEx (Permutation Importance, PDP/ICE, Break Down)                                            |
+| Dashboard                      | Dash, Dash-bootstrap-components, Plotly, Flask e Gunicorn                                      |
 | Deploy                         | Docker *(opcional)*                                                                            |
 
 

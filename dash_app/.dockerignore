@@ -1,0 +1,39 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.dist/
+build/
+dist/
+.ipynb_checkpoints/
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# VCS
+.git/
+.gitignore
+.gitattributes
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Dados locais (se existirem)
+data/
+*.csv
+*.parquet
+
+# Node/JS (se houver)
+node_modules/
+*.map
+
