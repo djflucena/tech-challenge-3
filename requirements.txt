@@ -10,3 +10,5 @@ scikit-learn
 scipy
 seaborn
 xgboost
+dalex==1.7.2
+nbformat==5.10.4

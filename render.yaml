@@ -1,0 +1,20 @@
+# render.yaml — deve ficar na raiz do repo
+services:
+  - type: web
+    name: breast-cancer-dash
+    env: docker
+    plan: free
+
+    # monorepo: código da app está em ./dash_app
+    rootDir: dash_app
+
+    # caminhos são relativos ao rootDir acima
+    dockerfilePath: Dockerfile
+    dockerContext: .
+
+    # ajuste se seu branch padrão for outro
+    branch: main
+
+    autoDeploy: true
+    healthCheckPath: /
+
