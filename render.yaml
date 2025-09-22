@@ -12,7 +12,7 @@ services:
     dockerfilePath: Dockerfile
     dockerContext: .
 
-    # ajuste se seu branch padrão for outro
+    # ajuste conforme branch padrão
     branch: main
 
     autoDeploy: true

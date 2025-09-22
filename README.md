@@ -27,6 +27,7 @@ tech-challenge-3/
 ├── notebooks            # Jupyter Notebooks com análise e modelagem
 ├── tests/               # Testes unitários e de integração
 ├── requirements.txt     # Dependências do projeto
+├── render.yaml          # Deploy automático em render.com (CI/CD)
 └── README.md            # Documentação principal
 ```
 
